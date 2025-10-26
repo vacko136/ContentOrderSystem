@@ -1,0 +1,61 @@
+CREATE TABLE Customers (
+    PhoneNumber VARCHAR(32) PRIMARY KEY,
+    CreatedAt DATETIME NOT NULL DEFAULT GETDATE()
+);
+
+CREATE TABLE Articles (
+    Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    Name NVARCHAR(255) NOT NULL,
+    Description NVARCHAR(MAX),
+    Price DECIMAL(10,2) NOT NULL CHECK (Price >= 0),
+    SupplierEmail NVARCHAR(255),
+    DateCreated DATETIME NOT NULL DEFAULT GETDATE(),
+    IsArchived BIT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE SubscriptionPackages (
+    Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    Name NVARCHAR(255) NOT NULL,
+    Description NVARCHAR(MAX),
+    Price DECIMAL(10,2) NOT NULL CHECK (Price >= 0),
+    IncludesMonthlyPhysicalMagazine BIT NOT NULL DEFAULT 0,
+    DateCreated DATETIME NOT NULL DEFAULT GETDATE(),
+    IsArchived BIT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE Orders (
+    Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    OrderNumber NVARCHAR(64) UNIQUE NOT NULL,
+    CustomerPhone VARCHAR(32) NOT NULL REFERENCES Customers(PhoneNumber),
+    Status NVARCHAR(20) NOT NULL
+        CONSTRAINT CHK_OrderStatus CHECK (Status IN ('Pending','Paid','Shipped','Cancelled','Completed')),
+    TotalPrice DECIMAL(12,2) NOT NULL,
+    DateCreated DATETIME NOT NULL DEFAULT GETDATE()
+);
+
+CREATE TABLE OrderArticles (
+    Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    OrderId UNIQUEIDENTIFIER NOT NULL REFERENCES Orders(Id),
+    ArticleId UNIQUEIDENTIFIER NULL,
+    ArticleName NVARCHAR(255) NOT NULL,
+    ArticlePrice DECIMAL(10,2) NOT NULL,
+    Quantity INT NOT NULL DEFAULT 1 CHECK (Quantity > 0)
+);
+
+CREATE TABLE OrderSubscription (
+    Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    OrderId UNIQUEIDENTIFIER NOT NULL REFERENCES Orders(Id),
+    SubscriptionPackageId UNIQUEIDENTIFIER NULL,
+    PackageName NVARCHAR(255) NOT NULL,
+    PackagePrice DECIMAL(10,2) NOT NULL
+);
+
+CREATE TABLE CustomerPurchases (
+    Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    CustomerPhone VARCHAR(32) NOT NULL REFERENCES Customers(PhoneNumber),
+    ArticleId UNIQUEIDENTIFIER NULL,
+    SubscriptionPackageId UNIQUEIDENTIFIER NULL,
+    OrderId UNIQUEIDENTIFIER NOT NULL REFERENCES Orders(Id),
+    DatePurchased DATETIME NOT NULL DEFAULT GETDATE(),
+    CONSTRAINT UQ_CustomerArticle UNIQUE (CustomerPhone, ArticleId)
+);
