@@ -1,14 +1,8 @@
-﻿// Application/Interfaces/IUnitOfWork.cs
-using ContentOrderSystem.Domain;
-using System;
-
+﻿// Application/Interfaces/ISmsGateway.cs
 namespace ContentOrderSystem.Application.Interfaces
 {
-    public interface IUnitOfWork : IDisposable
+    public interface ISmsGateway
     {
-        IRepository<Article> Articles { get; }
-        IRepository<SubscriptionPackage> SubscriptionPackages { get; }
-        IRepository<Order> Orders { get; }
-        void Commit();
+        void SendSms(string to, string content);
     }
 }
