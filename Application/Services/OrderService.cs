@@ -42,5 +42,10 @@ namespace ContentOrderSystem.Application.Services
             _unitOfWork.Orders.Add(order);
             _unitOfWork.Commit();
         }
+
+        public IEnumerable<Order> GetAllOrders()
+        {
+            return _unitOfWork.Orders.GetAll();
+        }
     }
 }
