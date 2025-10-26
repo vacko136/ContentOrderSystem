@@ -1,0 +1,50 @@
+## Ignore Visual Studio temporary files, build results, and cache directories
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio cache and working folders
+.vs/
+
+# Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# Visual Studio 2022+ backup and temp files
+.vscode/
+*.vcxproj.user
+*.ncb
+*.aps
+*.dbmdl
+*.opendb
+*.VC.db
+*.VC.VC.opendb
+
+# NuGet packages
+*.nupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+!**/[Pp]ackages/repositories.config
+
+# Publish output
+/publish/
+/wwwroot/
+/App_Data/
+*.publishsettings
+
+# Rider / JetBrains IDE
+.idea/
+*.iml
+
+# Others
+*.tmp
+*.bak
+*.swp
+*.lnk
+*.DS_Store
+Thumbs.db
